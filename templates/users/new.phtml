@@ -1,0 +1,37 @@
+<h1>Create New User</h1>
+
+<form method="POST" action="/users">
+    <div class="form-group">
+        <label>Name</label>
+        <input type="text" name="user[nickname]" value="<?= htmlspecialchars($user['nickname']) ?>">
+        <?php if (isset($errors['nickname'])): ?>
+            <div style="color:red"><?= $errors['nickname'] ?></div>
+        <?php endif ?>
+    </div>
+    <br>
+
+    <div class="form-group">
+        <label>E-mail</label>
+        <input type="text" name="user[email]" value="<?= htmlspecialchars($user['email']) ?>">
+        <?php if (isset($errors['email'])): ?>
+            <div style="color:red"><?= $errors['email'] ?></div>
+        <?php endif ?>
+    </div>
+    <br>
+
+    <div class="form-group">
+        <label>Id</label>
+        <input type="text" name="user[id]" value="<?= htmlspecialchars($user['id']) ?>">
+        <?php if (isset($errors['id'])): ?>
+            <div style="color:red"><?= $errors['id'] ?></div>
+        <?php endif ?>
+    </div>
+    <br>
+
+    <div>
+        <input type="submit" value="submit">
+    </div>
+</form>
+
+<a href="/users">Все юзеры</a>
+<a href="/users/new">Добавить нового</a>

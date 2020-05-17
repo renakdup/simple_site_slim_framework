@@ -1,0 +1,16 @@
+{
+    "require": {
+        "slim/psr7": "^1.1",
+        "slim/http": "^1.0",
+        "slim/slim": "^4.5",
+        "tightenco/collect": "^7.10",
+        "slim/php-view": "^2.2",
+        "php-di/php-di": "^6.1",
+        "kris/laravel-form-builder": "^1.30"
+    },
+    "autoload": {
+        "files": [
+            "public/src/Lib.php"
+        ]
+    }
+}

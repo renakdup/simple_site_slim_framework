@@ -1,0 +1,26 @@
+<h1>All users</h1>
+
+
+<?php if ($searchQuery) : ?>
+    <p>Ищем: <?= htmlspecialchars($searchQuery) ?></p>
+<?php endif; ?>
+
+<hr>
+
+<p>
+    <?php foreach ($users as $user) : ?>
+        <p>ID: <?= htmlspecialchars($user['id']) ?> | Nickname: <?= htmlspecialchars($user['nickname']) ?> | Email: <?= htmlspecialchars($user['email']) ?></p>
+    <?php endforeach; ?>
+</p>
+
+<hr>
+
+<form action="" method="get">
+    <input type="search" name="search_query" value="<?= htmlspecialchars($searchQuery) ?>" />
+    <input type="submit" value="Search" />
+</form>
+
+<br>
+
+<a href="/users">Все юзеры</a>
+<a href="/users/new">Добавить нового</a>
