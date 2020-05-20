@@ -40,7 +40,7 @@ function saveUser(array $user): bool
     $users[] = $user;
     $usersEncode = json_encode($users);
 
-    return file_put_contents(ABSPATH . '/database/user.json', $usersEncode);
+    return (bool) file_put_contents(ABSPATH . '/database/user.json', $usersEncode);
 }
 
 function searchUsers(string $searchQuery, string $field): array

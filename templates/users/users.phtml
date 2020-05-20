@@ -9,7 +9,11 @@
 
 <p>
     <?php foreach ($users as $user) : ?>
-        <p>ID: <?= htmlspecialchars($user['id']) ?> | Nickname: <?= htmlspecialchars($user['nickname']) ?> | Email: <?= htmlspecialchars($user['email']) ?></p>
+        <p>
+            <a href="<?= $linkUsers ?>/id/<?= $user['id'] ?>">
+                ID: <?= htmlspecialchars($user['id']) ?> | Nickname: <?= htmlspecialchars($user['nickname']) ?> | Email: <?= htmlspecialchars($user['email']) ?>
+            </a>
+        </p>
     <?php endforeach; ?>
 </p>
 
@@ -22,5 +26,5 @@
 
 <br>
 
-<a href="/users">Все юзеры</a>
-<a href="/users/new">Добавить нового</a>
+<a href="<?= $linkUsers ?>">Все юзеры</a>
+<a href="<?= $linkUsersNew ?>">Добавить нового</a>

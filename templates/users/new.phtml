@@ -1,6 +1,6 @@
 <h1>Create New User</h1>
 
-<form method="POST" action="/users">
+<form method="POST" action="<?= $linkUsers ?>">
     <div class="form-group">
         <label>Name</label>
         <input type="text" name="user[nickname]" value="<?= htmlspecialchars($user['nickname']) ?>">
@@ -33,5 +33,5 @@
     </div>
 </form>
 
-<a href="/users">Все юзеры</a>
-<a href="/users/new">Добавить нового</a>
+<a href="<?= $linkUsers ?>">Все юзеры</a>
+<a href="<?= $linkUsersNew ?>">Добавить нового</a>

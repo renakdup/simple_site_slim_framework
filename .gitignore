@@ -1,6 +1,6 @@
 /.idea
 
-/database
+/database/*
 !/database/.keep
 
 /vendor
