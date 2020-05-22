@@ -53,3 +53,10 @@ function searchUsers(string $searchQuery, string $field): array
         })
         ->toArray();
 }
+
+function existUser(int $id): bool
+{
+    return (bool) collect(getUsers())->reject(function ($val) use ($id) {
+        return (int) $val['id'] !== $id;
+    })->all();
+}

@@ -6,20 +6,30 @@ declare(strict_types=1);
 require __DIR__ . '/../vendor/autoload.php';
 
 use Slim\Factory\AppFactory;
-use Slim\Http\ServerRequest as Request;
-use Slim\Http\Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 use DI\Container;
 use function Renakdup\Src\validateUserForm;
 use function Renakdup\Src\saveUser;
 use function Renakdup\Src\getUsers;
 use function Renakdup\Src\searchUsers;
+use function Renakdup\Src\existUser;
+
+// Старт PHP сессии
+session_start();
 
 define('ABSPATH', dirname(__DIR__));
 
 $container = new Container();
+
 $container->set('renderer', function () {
     return new \Slim\Views\PhpRenderer(__DIR__ . '/../templates');
 });
+
+$container->set('flash', function () {
+    return new \Slim\Flash\Messages();
+});
+
 
 $app = AppFactory::createFromContainer($container);
 $app->addErrorMiddleware(true, true, true);
@@ -28,8 +38,9 @@ $app->addErrorMiddleware(true, true, true);
 $router = $app->getRouteCollector()->getRouteParser();
 
 $app->get('/', function (Request $request, Response $response) use ($router) {
-    return $response->write('Welcome to Slim!');
+    return $response->withRedirect($router->urlFor('users'));
 });
+
 
 $app->get('/users', function (Request $request, Response $response, array $args) use ($router) {
     $searchQuery = $request->getQueryParam('search_query', false);
@@ -40,15 +51,19 @@ $app->get('/users', function (Request $request, Response $response, array $args)
         $users = getUsers();
     }
 
+    $flash = $this->get('flash')->getMessages();
+
     $params = [
         'linkUsers' => $router->urlFor('users'),
         'linkUsersNew' => $router->urlFor('addUser'),
         'users' => $users,
-        'searchQuery' => $searchQuery
+        'searchQuery' => $searchQuery,
+        'flash' => $flash,
     ];
 
     return $this->get('renderer')->render($response, $router->urlFor('users') . '/users.phtml', $params);
 })->setName('users');
+
 
 $app->post('/users', function (Request $request, Response $response, array $args) use ($router) {
     $user = $request->getParsedBodyParam('user', []);
@@ -56,6 +71,9 @@ $app->post('/users', function (Request $request, Response $response, array $args
 
     if (count($errors) === 0) {
         saveUser($user);
+
+        $this->get('flash')->addMessage('success', 'User success added');
+
         return $response->withRedirect($router->urlFor('users'), 302);
     }
 
@@ -68,6 +86,7 @@ $app->post('/users', function (Request $request, Response $response, array $args
 
     return $this->get('renderer')->render($response->withStatus(422), $router->urlFor('users') . '/new.phtml', $params);
 });
+
 
 $app->get('/users/new', function (Request $request, Response $response, array $args) use ($router) {
     $params = [
@@ -85,6 +104,11 @@ $app->get('/users/new', function (Request $request, Response $response, array $a
 })->setName('addUser');
 
 $app->get('/users/id/{id:[0-9]+}', function (Request $request, Response $response, array $args) use ($router) {
+
+    if (! existUser((int)$args['id'])) {
+        return $response->withStatus(404);
+    }
+
     return $this->get('renderer')->render($response, '/users/show.phtml', $args);
 })->setName('user');
 
